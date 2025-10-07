@@ -95,13 +95,19 @@ export const Dashboard = () => {
           <p className="text-green-100 text-xs">This month</p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg">
+        <div className={`bg-gradient-to-br rounded-2xl p-6 text-white shadow-lg ${
+          stats.savings >= 0
+            ? 'from-teal-500 to-teal-600'
+            : 'from-orange-500 to-orange-600'
+        }`}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-blue-100 text-sm font-medium">Net Savings</span>
-            <DollarSign className="w-5 h-5 text-blue-200" />
+            <span className={`text-sm font-medium ${stats.savings >= 0 ? 'text-teal-100' : 'text-orange-100'}`}>Net Savings</span>
+            <DollarSign className={`w-5 h-5 ${stats.savings >= 0 ? 'text-teal-200' : 'text-orange-200'}`} />
           </div>
           <p className="text-3xl font-bold mb-1">₹{stats.savings.toLocaleString()}</p>
-          <p className="text-blue-100 text-xs">This month</p>
+          <p className={`text-xs ${stats.savings >= 0 ? 'text-teal-100' : 'text-orange-100'}`}>
+            {stats.savings >= 0 ? 'Great job!' : 'Needs attention'} This month
+          </p>
         </div>
       </div>
 
@@ -130,3 +136,4 @@ export const Dashboard = () => {
     </div>
   );
 };
+
