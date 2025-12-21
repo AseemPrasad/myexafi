@@ -1,5 +1,4 @@
 import { TrendingUp, Shield, Target, PiggyBank } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
 
 type ScoreBreakdown = {
   spending_discipline: number;
@@ -9,8 +8,7 @@ type ScoreBreakdown = {
 };
 
 export const HealthScore = ({ breakdown }: { breakdown: ScoreBreakdown }) => {
-  const { profile } = useAuth();
-  const score = profile?.financial_health_score || 50;
+  const score = 65;
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'from-green-500 to-emerald-600';

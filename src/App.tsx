@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { AuthForm } from './components/auth/AuthForm';
-import { Onboarding } from './components/onboarding/Onboarding';
 import { Navbar } from './components/layout/Navbar';
 import { Dashboard } from './components/dashboard/Dashboard';
 import { TransactionList } from './components/transactions/TransactionList';
@@ -9,28 +6,8 @@ import { GoalsList } from './components/goals/GoalsList';
 import { ChallengesList } from './components/challenges/ChallengesList';
 import { BadgesList } from './components/badges/BadgesList';
 
-function AppContent() {
-  const { user, profile, loading } = useAuth();
+function App() {
   const [currentView, setCurrentView] = useState('dashboard');
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <AuthForm />;
-  }
-
-  if (profile && !profile.onboarding_completed) {
-    return <Onboarding onComplete={() => window.location.reload()} />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -64,14 +41,6 @@ function AppContent() {
         )}
       </main>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
   );
 }
 

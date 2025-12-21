@@ -1,26 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Lightbulb } from 'lucide-react';
 import { supabase, Insight } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
 import { InsightCard } from './InsightCard';
 
 export const InsightsList = () => {
-  const { user } = useAuth();
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadInsights();
-    }
-  }, [user]);
+    loadInsights();
+  }, []);
 
   const loadInsights = async () => {
     try {
       const { data, error } = await supabase
         .from('insights')
         .select('*')
-        .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .limit(10);
 
@@ -61,3 +56,4 @@ export const InsightsList = () => {
     </div>
   );
 };
+

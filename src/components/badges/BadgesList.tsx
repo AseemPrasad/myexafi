@@ -1,25 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Award } from 'lucide-react';
 import { supabase, Badge } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
 
 export const BadgesList = () => {
-  const { user } = useAuth();
   const [badges, setBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadBadges();
-    }
-  }, [user]);
+    loadBadges();
+  }, []);
 
   const loadBadges = async () => {
     try {
       const { data, error } = await supabase
         .from('badges')
         .select('*')
-        .eq('user_id', user!.id)
         .order('earned_at', { ascending: false });
 
       if (error) throw error;

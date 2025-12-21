@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Plus, TrendingDown, TrendingUp, DollarSign } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { HealthScore } from './HealthScore';
 import { InsightsList } from '../insights/InsightsList';
 import { TransactionForm } from '../transactions/TransactionForm';
 
 export const Dashboard = () => {
-  const { profile } = useAuth();
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [stats, setStats] = useState({
     totalExpense: 0,
@@ -17,10 +15,8 @@ export const Dashboard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    if (profile) {
-      loadStats();
-    }
-  }, [profile, refreshKey]);
+    loadStats();
+  }, [refreshKey]);
 
   const loadStats = async () => {
     try {
@@ -31,7 +27,6 @@ export const Dashboard = () => {
       const { data, error } = await supabase
         .from('transactions')
         .select('amount, transaction_type')
-        .eq('user_id', profile!.id)
         .gte('transaction_date', startOfMonth.toISOString().split('T')[0]);
 
       if (error) throw error;
@@ -49,19 +44,6 @@ export const Dashboard = () => {
     }
   };
 
-  const getCoachMessage = () => {
-    const persona = profile?.coach_persona;
-    const name = profile?.full_name?.split(' ')[0] || 'there';
-
-    if (persona === 'tough_accountant') {
-      return `${name}, let's get your finances in order. No excuses!`;
-    } else if (persona === 'chill_friend') {
-      return `Hey ${name}! Ready to crush some financial goals today?`;
-    } else {
-      return `${name}, here's your data-driven financial snapshot.`;
-    }
-  };
-
   const scoreBreakdown = {
     spending_discipline: 75,
     savings_rate: 65,
@@ -72,7 +54,7 @@ export const Dashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">{getCoachMessage()}</h1>
+        <h1 className="text-3xl font-bold text-slate-800 mb-2">Welcome to Your Financial Dashboard</h1>
         <p className="text-slate-600">Here's your financial overview for this month</p>
       </div>
 
@@ -136,4 +118,6 @@ export const Dashboard = () => {
     </div>
   );
 };
+
+
 

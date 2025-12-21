@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
 
 type TransactionFormData = {
   amount: string;
@@ -17,8 +16,9 @@ const categories = ['Food', 'Transport', 'Entertainment', 'Bills', 'Shopping', '
 const paymentMethods = ['Card', 'Cash', 'UPI', 'Bank Transfer'];
 const emotionalTriggers = ['None', 'Stress', 'Boredom', 'Celebration', 'Social Pressure', 'Tired', 'Angry'];
 
+const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000';
+
 export const TransactionForm = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) => {
-  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<TransactionFormData>({
     amount: '',
@@ -32,13 +32,12 @@ export const TransactionForm = ({ onClose, onSuccess }: { onClose: () => void; o
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
 
     setLoading(true);
     try {
       const now = new Date();
       const { error } = await supabase.from('transactions').insert({
-        user_id: user.id,
+        user_id: DEMO_USER_ID,
         amount: parseFloat(formData.amount),
         category: formData.category,
         description: formData.description,
@@ -208,3 +207,4 @@ export const TransactionForm = ({ onClose, onSuccess }: { onClose: () => void; o
     </div>
   );
 };
+
