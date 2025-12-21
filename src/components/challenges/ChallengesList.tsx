@@ -1,26 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Trophy } from 'lucide-react';
 import { supabase, Challenge } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
 import { ChallengeCard } from './ChallengeCard';
 
 export const ChallengesList = () => {
-  const { user } = useAuth();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadChallenges();
-    }
-  }, [user]);
+    loadChallenges();
+  }, []);
 
   const loadChallenges = async () => {
     try {
       const { data, error } = await supabase
         .from('challenges')
         .select('*')
-        .eq('user_id', user!.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -81,3 +76,4 @@ export const ChallengesList = () => {
     </div>
   );
 };
+

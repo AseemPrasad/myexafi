@@ -1,26 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Target } from 'lucide-react';
 import { supabase, FinancialGoal } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
 import { GoalCard } from './GoalCard';
 
 export const GoalsList = () => {
-  const { user } = useAuth();
   const [goals, setGoals] = useState<FinancialGoal[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadGoals();
-    }
-  }, [user]);
+    loadGoals();
+  }, []);
 
   const loadGoals = async () => {
     try {
       const { data, error } = await supabase
         .from('financial_goals')
         .select('*')
-        .eq('user_id', user!.id)
         .eq('is_active', true)
         .order('created_at', { ascending: false });
 
@@ -61,3 +56,4 @@ export const GoalsList = () => {
     </div>
   );
 };
+

@@ -1,25 +1,20 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpCircle, ArrowDownCircle, Calendar, CreditCard } from 'lucide-react';
 import { supabase, Transaction } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
 
 export const TransactionList = () => {
-  const { user } = useAuth();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadTransactions();
-    }
-  }, [user]);
+    loadTransactions();
+  }, []);
 
   const loadTransactions = async () => {
     try {
       const { data, error } = await supabase
         .from('transactions')
         .select('*')
-        .eq('user_id', user!.id)
         .order('transaction_date', { ascending: false })
         .limit(50);
 
